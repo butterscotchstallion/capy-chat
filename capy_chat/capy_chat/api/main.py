@@ -1,12 +1,11 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
 # This is relative to the directory where this application is run
 app.mount(
-    "/", StaticFiles(directory="capy_chat/capy_chat/static", html=True), name="static"
+    "/", StaticFiles(directory="./capy_chat/capy_chat/static", html=True), name="static"
 )
 
 
@@ -30,11 +29,6 @@ class ConnectionManager:
 
 
 manager = ConnectionManager()
-
-
-@app.get("/")
-async def get():
-    return HTMLResponse(html)
 
 
 @app.websocket("/ws/{client_id}")
