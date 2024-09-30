@@ -1,8 +1,12 @@
-<div class="window" style="margin: 32px; width: 250px">
-	<div class="title-bar">
-		<div class="title-bar-text">Capy Chat</div>
+<script>
+	import SignInWindow from '../components/signInWindow.svelte';
+	import TailwindCss from '../lib/tailwind.svelte';
+</script>
+
+<main>
+	<div class="grid grid-flow-col auto-cols-max">
+		<SignInWindow />
 	</div>
-	<div class="window-body">
-		<p>Hello, world!</p>
-	</div>
-</div>
+</main>
+
+<TailwindCss />

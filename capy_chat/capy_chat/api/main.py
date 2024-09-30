@@ -1,12 +1,11 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
 # This is relative to the directory where this application is run
-app.mount(
-    "/", StaticFiles(directory="./capy_chat/capy_chat/static", html=True), name="static"
-)
+# app.mount(
+#    "/", StaticFiles(directory="./capy_chat/capy_chat/static", html=True), name="static"
+# )
 
 
 class ConnectionManager:
