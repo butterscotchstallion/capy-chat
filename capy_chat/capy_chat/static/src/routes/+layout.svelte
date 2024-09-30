@@ -1,14 +1,21 @@
 <script>
 	import '../../node_modules/xp.css/dist/XP.css';
+	import '../app.css';
 </script>
 
 <svelte:head>
 	<title>Capy Chat</title>
 </svelte:head>
 
-<slot />
+<div class="md:container md:mx-auto">
+	<div class="grid auto-cols-max grid-flow-col">
+		<div class="flex">
+			<slot class="justify-center" />
+		</div>
+	</div>
+</div>
 
-<style lang="scss">
+<style>
 	:global(body) {
 		background-color: #008080;
 	}
