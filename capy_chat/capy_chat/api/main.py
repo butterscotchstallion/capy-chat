@@ -1,32 +1,9 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
+from .connection_manager import ConnectionManager
+from .user_api import user_router
+
 app = FastAPI()
-
-# This is relative to the directory where this application is run
-# app.mount(
-#    "/", StaticFiles(directory="./capy_chat/capy_chat/static", html=True), name="static"
-# )
-
-
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: list[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
-
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_text(message)
-
-
 manager = ConnectionManager()
 
 
@@ -41,3 +18,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast(f"Client #{client_id} left the chat")
+
+
+app.include_router(user_router)

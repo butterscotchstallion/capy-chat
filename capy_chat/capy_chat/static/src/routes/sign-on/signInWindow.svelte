@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
 	onMount(async () => {
 		const clientID = 'capybaraenjoyer';
@@ -16,6 +17,8 @@
 		const clientID = encodeURI('');
 		const ws = new WebSocket(`ws://localhost:8000/ws/${clientID}`);
 	}
+
+	let signingOn = false;
 </script>
 
 <div class="window sign-on-window mt-5">
@@ -33,7 +36,13 @@
 				<p class="text-xl font-bold text-white">Capy Chat</p>
 			</div>
 			<div class="pt-1">
-				<form method="POST">
+				<form
+					method="POST"
+					action="?/sign-on"
+					use:enhance={() => {
+						signingOn = true;
+					}}
+				>
 					<div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-6">
 						<div class="sm:col-span-7">
 							<!--Screen name-->
@@ -51,6 +60,7 @@
 										value="capybaraenjoyer"
 										class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
 										placeholder=""
+										required
 									/>
 								</div>
 								<div>
@@ -70,6 +80,7 @@
 										value="capybaraenjoyer"
 										id="password"
 										class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+										required
 									/>
 								</div>
 								<div>
@@ -97,7 +108,7 @@
 							<div class="mt-3">
 								<div class="grid grid-cols-3 gap-4">
 									<div>
-										<button title="Help" class="p-2">
+										<button title="Help" class="pl-1 pr-1 pt-2">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												width="24"
@@ -110,10 +121,11 @@
 													d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.496 6.033a.237.237 0 0 1-.24-.247C5.35 4.091 6.737 3.5 8.005 3.5c1.396 0 2.672.73 2.672 2.24 0 1.08-.635 1.594-1.244 2.057-.737.559-1.01.768-1.01 1.486v.105a.25.25 0 0 1-.25.25h-.81a.25.25 0 0 1-.25-.246l-.004-.217c-.038-.927.495-1.498 1.168-1.987.59-.444.965-.736.965-1.371 0-.825-.628-1.168-1.314-1.168-.803 0-1.253.478-1.342 1.134-.018.137-.128.25-.266.25h-.825zm2.325 6.443c-.584 0-1.009-.394-1.009-.927 0-.552.425-.94 1.01-.94.609 0 1.028.388 1.028.94 0 .533-.42.927-1.029.927"
 												/>
 											</svg>
+											<div class="pt-1">Help</div>
 										</button>
 									</div>
 									<div>
-										<button title="Setup" class="p-2">
+										<button title="Setup" class="pl-1 pr-1 pt-2">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												width="24"
@@ -126,10 +138,11 @@
 													d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11z"
 												/>
 											</svg>
+											<div class="pt-1">Setup</div>
 										</button>
 									</div>
 									<div>
-										<button title="Sign On" class="p-2">
+										<button title="Sign On" class="pl-1 pr-1 pt-2" disabled={signingOn}>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												width="24"
@@ -147,6 +160,7 @@
 													d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"
 												/>
 											</svg>
+											<div class="pt-1">Sign On</div>
 										</button>
 									</div>
 								</div>
