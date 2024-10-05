@@ -1,7 +1,10 @@
 <script>
 	import '../../node_modules/xp.css/dist/XP.css';
 	import '../app.css';
+	import TailwindCss from '../lib/tailwind.svelte';
 </script>
+
+<TailwindCss />
 
 <svelte:head>
 	<title>Capy Chat</title>
