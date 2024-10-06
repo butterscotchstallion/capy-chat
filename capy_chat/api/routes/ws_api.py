@@ -1,7 +1,8 @@
 import logging
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from lib import ConnectionManager
+
+from capy_chat.api.lib import ConnectionManager
 
 manager = ConnectionManager()
 ws_router = APIRouter()

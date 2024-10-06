@@ -1,10 +1,11 @@
 from fastapi import FastAPI
-from lib.database import Base, engine
-from lib.logger import get_customized_logger
-from lib.models import User
-from routes import session_router, user_router, ws_router
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
+from capy_chat.api.lib.database import Base, engine
+from capy_chat.api.lib.logger import get_customized_logger
+from capy_chat.api.lib.models import User
+from capy_chat.api.routes import session_router, user_router, ws_router
 
 logger = get_customized_logger(__name__)
 
