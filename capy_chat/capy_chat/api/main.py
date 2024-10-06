@@ -1,23 +1,11 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI
+from routes.user_api import user_router
+from routes.ws_api import ws_router
 
-from .connection_manager import ConnectionManager
-from .user_api import user_router
+from capy_chat.capy_chat.api.routes import session_router
 
 app = FastAPI()
-manager = ConnectionManager()
 
-
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    await manager.connect(websocket)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            await manager.send_personal_message(f"You wrote: {data}", websocket)
-            await manager.broadcast(f"Client #{client_id} says: {data}")
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{client_id} left the chat")
-
-
+app.include_router(ws_router)
 app.include_router(user_router)
+app.include_router(session_router)

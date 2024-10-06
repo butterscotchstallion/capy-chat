@@ -2,15 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
 	onMount(async () => {
-		const clientID = 'capybaraenjoyer';
-		const ws = new WebSocket(`ws://localhost:8000/ws/${clientID}`);
-		ws.onmessage = function (event) {
-			const messages = document.getElementById('messages');
-			const message = document.createElement('li');
-			const content = document.createTextNode(event.data);
-			message.appendChild(content);
-			//messages.appendChild(message);
-		};
+		// connect here maybe
 	});
 
 	function connect() {

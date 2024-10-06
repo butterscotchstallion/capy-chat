@@ -12,7 +12,7 @@
 
 <div class="md:container md:mx-auto">
 	<div class="grid auto-cols-max grid-flow-col">
-		<div class="flex">
+		<div>
 			<slot class="justify-center" />
 		</div>
 	</div>
