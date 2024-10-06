@@ -163,3 +163,4 @@ cython_debug/
 .vscode
 node_modules
 inspiration
+config.json
