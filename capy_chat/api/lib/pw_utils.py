@@ -1,8 +1,17 @@
 import os
+from base64 import b64encode
 from hashlib import pbkdf2_hmac
 
 
-def hash_password(plaintext_password: str, salt: bytes = os.urandom(1024)) -> str:
+def generate_salt() -> bytes:
+    return os.urandom(1024)
+
+
+def bytes_to_str(input: bytes):
+    return b64encode(input).decode("utf-8")
+
+
+def hash_password(plaintext_password: str, salt: bytes = generate_salt()) -> str:
     iterations = 210000
     dk = pbkdf2_hmac("sha512", plaintext_password.encode("ascii"), salt, iterations)
     return dk.hex()
