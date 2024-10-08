@@ -33,6 +33,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
+    { name = "httpx" },
     { name = "pytest" },
     { name = "sqlalchemy" },
     { name = "websockets" },
@@ -41,6 +42,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.0" },
+    { name = "httpx", specifier = ">=0.27.2" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "sqlalchemy", specifier = ">=2.0.35" },
     { name = "websockets", specifier = ">=13.1" },

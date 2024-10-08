@@ -11,9 +11,12 @@ def bytes_to_str(input: bytes):
     return b64encode(input).decode("utf-8")
 
 
-def hash_password(plaintext_password: str, salt: bytes = generate_salt()) -> str:
-    iterations = 210000
-    dk = pbkdf2_hmac("sha512", plaintext_password.encode("ascii"), salt, iterations)
+def hash_password(
+    plaintext_password: str, salt: bytes = generate_salt(), iterations: int = 210000
+) -> str:
+    dk: bytes = pbkdf2_hmac(
+        "sha512", plaintext_password.encode("ascii"), salt, iterations
+    )
     return dk.hex()
 
 
