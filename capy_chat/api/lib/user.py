@@ -23,12 +23,11 @@ def get_user_by_username(username: str) -> User | None:
             return user
 
 
-def get_user_by_id(uuid: str) -> User | None:
+def get_user_by_id(user_id: str) -> User | None:
     user = None
     try:
-        hex_user_id = uuid.replace("-", "")
         with Session() as session:
-            user = session.query(User).filter(User.id == hex_user_id).first()
+            user = session.query(User).filter(User.id == user_id).first()
     except Exception as err:
         logger.error(f"Unexpected exception: {err}")
     finally:

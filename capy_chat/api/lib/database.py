@@ -9,5 +9,4 @@ class Base(DeclarativeBase):
 engine = create_engine(
     "sqlite:///./db.sqlite", connect_args={"check_same_thread": False}
 )
-Session = sessionmaker(expire_on_commit=False, autoflush=True)
-Session.configure(bind=engine)
+Session = sessionmaker(bind=engine, expire_on_commit=False, autoflush=True)

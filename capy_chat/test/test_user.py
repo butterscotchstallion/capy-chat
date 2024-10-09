@@ -19,9 +19,9 @@ def test_user_info_route():
     test_user = create_user(uuid, uuid)
     assert isinstance(test_user, User), f"Failed to create test user {uuid}"
     assert test_user.username == uuid
-
-    response = client.get(f"/user/{test_user.id}")
-    assert response.status_code == 200, response.text
+    user_id = test_user.id
+    response = client.get(f"/user/{user_id}")
+    assert response.status_code == 200, f"Could not find user with ID {user_id}"
 
 
 def test_normalize_username():
