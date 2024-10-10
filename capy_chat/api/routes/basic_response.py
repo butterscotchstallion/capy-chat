@@ -7,4 +7,4 @@ from typing_extensions import TypedDict
 @dataclass
 class BasicResponse(TypedDict):
     status: Literal["OK"] | Literal["ERROR"]
-    details: dict | str
+    details: dict[str, str | dict]

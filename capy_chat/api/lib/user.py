@@ -45,8 +45,6 @@ def create_user(username: str, password: str) -> User | None:
         if exists:
             logger.debug(f"User {username} exists")
         else:
-            logger.debug(f"Creating user {username}")
-
             with Session() as session:
                 random_bytes = generate_salt()
                 salt = b64encode(random_bytes).decode("utf-8")
@@ -57,7 +55,7 @@ def create_user(username: str, password: str) -> User | None:
                 )
                 session.add(default_user)
                 session.commit()
-                logger.info(f"Added user {username}")
+                logger.info(f"Created user {username}")
                 return default_user
     except sqlite3.IntegrityError as integrity_error:
         logger.error(f"Integrity error creating user: {integrity_error}")

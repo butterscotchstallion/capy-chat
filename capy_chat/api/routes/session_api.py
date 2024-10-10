@@ -21,7 +21,10 @@ async def session_route(session_id: str):
             session_info = {"status": "OK", "details": {"session": session.to_json()}}
             return JSONResponse(content=session_info)
         else:
-            resp: BasicResponse = {"status": "ERROR", "details": "Session not found"}
+            resp: BasicResponse = {
+                "status": "ERROR",
+                "details": {"message": "Session not found"},
+            }
             return JSONResponse(status_code=404, content=resp)
     except Exception as err:
         logger.error(f"Unexpected error getting session: {err}")

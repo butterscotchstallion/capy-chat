@@ -1,3 +1,4 @@
+import json
 from uuid import uuid4
 
 from fastapi.testclient import TestClient
@@ -9,9 +10,27 @@ from capy_chat.api.lib.user import (
     normalize_username,
 )
 from capy_chat.start_api import app
+from capy_chat.test.conftest import create_test_user
 
 client = TestClient(app)
 logger = get_customized_logger(__name__)
+
+
+def test_user_sign_on():
+    new_user = create_test_user()
+    assert new_user, "Failed to create test user"
+
+    response = client.post(
+        "/user/sign-on",
+        headers={"Content-Type": "application/json"},
+        content=json.dumps(
+            {"username": new_user.username, "password": new_user.password}
+        ),
+    )
+    assert response.status_code == 200, "Sign in failed"
+    resp_json = response.json()
+    assert resp_json["status"] == "OK"
+    assert resp_json["details"]["session_id"]
 
 
 def test_user_info_route():
