@@ -1,11 +1,12 @@
 import uuid
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 from capy_chat.api.lib.logger import get_customized_logger
 from capy_chat.api.lib.user import get_user_by_id
+from capy_chat.api.routes.basic_response import BasicResponse
 
 user_router = APIRouter()
 logger = get_customized_logger(__name__)
@@ -19,7 +20,8 @@ async def get_user_info(user_id: str):
         resp = {"status": "OK", "details": {"user": user.to_json()}}
         return JSONResponse(content=resp)
     else:
-        raise HTTPException(status_code=404, detail="User not found")
+        resp: BasicResponse = {"status": "ERROR", "details": "User not found"}
+        return JSONResponse(status_code=404, content=resp)
 
 
 @user_router.post("/user/sign-on")

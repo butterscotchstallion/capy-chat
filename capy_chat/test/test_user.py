@@ -37,6 +37,14 @@ def test_user_info_route():
     assert "password" not in user
 
 
+def test_user_error():
+    response = client.get("/user/asdf")
+    assert response.status_code == 404
+    resp_json = response.json()
+    assert resp_json["details"]
+    assert resp_json["status"] == "ERROR"
+
+
 def test_normalize_username():
     normalized = normalize_username(" TeST      UsErNaMe ")
 
