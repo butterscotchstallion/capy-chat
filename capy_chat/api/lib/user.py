@@ -1,3 +1,4 @@
+import sqlite3
 import traceback
 from base64 import b64encode
 
@@ -58,6 +59,8 @@ def create_user(username: str, password: str) -> User | None:
                 session.commit()
                 logger.info(f"Added user {username}")
                 return default_user
+    except sqlite3.IntegrityError as integrity_error:
+        logger.error(f"Integrity error creating user: {integrity_error}")
     except KeyError as missing_key:
         logger.error(f"Missing key from config: {missing_key}")
     except Exception as err:

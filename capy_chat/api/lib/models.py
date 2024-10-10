@@ -35,14 +35,26 @@ class UserSession(Base):
     # parent_id: Mapped[int] = mapped_column(ForeignKey("parent_table.id"))
     user: Mapped["User"] = relationship(back_populates="user_session")
     user_id: Mapped[str] = mapped_column(ForeignKey("user_account.id"))
+
     UniqueConstraint(user_id)
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "created_date": str(self.created_date),
+            "updated_date": str(self.updated_date),
+        }
+
+
+def uuid_str():
+    return str(uuid4())
 
 
 # Parent
 class User(Base):
     __tablename__ = "user_account"
 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=str(uuid4()))
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uuid_str)
     username: Mapped[str] = mapped_column(String(16))
     password: Mapped[str] = mapped_column(Text)
     salt: Mapped[str] = mapped_column(String(1024))

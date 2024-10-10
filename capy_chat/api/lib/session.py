@@ -27,6 +27,8 @@ def get_or_create_user_session(user_id: str) -> UserSession | None:
                 new_user_session = UserSession(user_id=user_id)
                 session.add(new_user_session)
                 session.commit()
+                logger.debug("Created new session")
+
                 return new_user_session
     except Exception as err:
         logger.error(f"Unexpected error: {err}")

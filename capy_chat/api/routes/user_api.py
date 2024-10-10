@@ -1,5 +1,4 @@
 import uuid
-from typing import Literal, TypedDict
 
 from fastapi import APIRouter, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -7,14 +6,9 @@ from fastapi.responses import JSONResponse
 
 from capy_chat.api.lib.logger import get_customized_logger
 from capy_chat.api.lib.user import get_user_by_id
-from capy_chat.api.routes import BasicResponse
 
 user_router = APIRouter()
 logger = get_customized_logger(__name__)
-
-
-class UserInfoResponse(BasicResponse, TypedDict):
-    details: dict[Literal["user"], str]
 
 
 @user_router.get("/user/{user_id}")
@@ -22,7 +16,7 @@ async def get_user_info(user_id: str):
     user = get_user_by_id(user_id)
     logger.debug(f"get_user_info: user={user}")
     if user:
-        resp: UserInfoResponse = {"status": "OK", "details": {"user": user.to_json()}}
+        resp = {"status": "OK", "details": {"user": user.to_json()}}
         return JSONResponse(content=resp)
     else:
         raise HTTPException(status_code=404, detail="User not found")

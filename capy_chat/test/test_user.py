@@ -22,6 +22,19 @@ def test_user_info_route():
     user_id = test_user.id
     response = client.get(f"/user/{user_id}")
     assert response.status_code == 200, f"Could not find user with ID {user_id}"
+    response_json = response.json()
+
+    assert response_json["status"] == "OK"
+
+    user = response_json["details"]["user"]
+
+    assert user, "User not found in response"
+    assert user["id"]
+    assert user["username"]
+    assert user["created_date"]
+    assert user["updated_date"]
+    assert "active" in user
+    assert "password" not in user
 
 
 def test_normalize_username():
