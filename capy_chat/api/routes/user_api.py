@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 from capy_chat.api.lib.logger import get_customized_logger
+from capy_chat.api.lib.models import User
 from capy_chat.api.lib.pw_utils import check_password
 from capy_chat.api.lib.session import get_or_create_user_session
 from capy_chat.api.lib.user import get_user_by_id, get_user_by_username
@@ -31,20 +32,21 @@ async def get_user_info(user_id: str):
 
 @user_router.post("/user/sign-on")
 async def user_sign_on(user_info: dict):
-    logger.info("User sign on endpoint")
-    logger.debug(user_info)
     error_resp: BasicResponse = {
         "status": "ERROR",
         "details": {"message": "Invalid username or password"},
     }
     try:
-        username = user_info["username"]
-        password = user_info["password"]
+        username: str = user_info["username"]
+        password: str = user_info["password"]
 
-        user = get_user_by_username(username)
+        user: User | None = get_user_by_username(username)
 
         if user:
-            pw_match = check_password(password, user.password, b64decode(user.salt))
+            logger.debug(f"Authenticating {username} with {password}")
+
+            salt_bytes = b64decode(user.salt)
+            pw_match: bool = check_password(password, user.password, salt_bytes)
             if pw_match:
                 logger.debug(f"Password match for {username}")
                 session = get_or_create_user_session(user.id)

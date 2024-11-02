@@ -48,9 +48,10 @@ def create_user(username: str, password: str) -> User | None:
             with Session() as session:
                 random_bytes = generate_salt()
                 salt = b64encode(random_bytes).decode("utf-8")
+                hashed_password = hash_password(password, random_bytes)
                 default_user = User(
                     username=username,
-                    password=hash_password(password, random_bytes),
+                    password=hashed_password,
                     salt=salt,
                 )
                 session.add(default_user)

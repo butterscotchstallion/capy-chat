@@ -7,7 +7,7 @@ def generate_salt() -> bytes:
     return os.urandom(1024)
 
 
-def bytes_to_str(input: bytes):
+def bytes_to_str(input: bytes) -> str:
     return b64encode(input).decode("utf-8")
 
 

@@ -55,9 +55,9 @@ class User(Base):
     __tablename__ = "user_account"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uuid_str)
-    username: Mapped[str] = mapped_column(String(16))
-    password: Mapped[str] = mapped_column(Text)
-    salt: Mapped[str] = mapped_column(String(1024))
+    username: Mapped[str] = mapped_column(String(16), nullable=False)
+    password: Mapped[str] = mapped_column(Text, nullable=False)
+    salt: Mapped[str] = mapped_column(Text, nullable=False)
     created_date: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
