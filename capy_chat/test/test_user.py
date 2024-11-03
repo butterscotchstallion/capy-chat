@@ -1,7 +1,9 @@
 import json
+import os
 from uuid import uuid4
 
 from fastapi.testclient import TestClient
+from httpx import Response
 
 from capy_chat.api.lib.logger import get_customized_logger
 from capy_chat.api.lib.models import User
@@ -10,7 +12,6 @@ from capy_chat.api.lib.user import (
     get_user_by_username, normalize_username,
 )
 from capy_chat.start_api import app
-from capy_chat.test.conftest import create_test_user
 
 client = TestClient(app)
 logger = get_customized_logger(__name__)
@@ -18,22 +19,25 @@ logger = get_customized_logger(__name__)
 
 def test_user_sign_on():
     # Create new user
-    new_user: User | None = create_test_user()
+    username = os.urandom(16).hex()
+    password = os.urandom(16).hex()
+    new_user: User | None = create_user(username, password)
+
     assert isinstance(new_user, User), "Failed to create test user"
     assert new_user.username
     assert new_user.password
 
     # Confirm user exists
-    db_new_user = get_user_by_username(new_user.username)
+    db_new_user: User | None = get_user_by_username(new_user.username)
     assert isinstance(db_new_user, User), "Failed to create test user"
     assert db_new_user.username == new_user.username
     assert db_new_user.password == new_user.password
 
-    response = client.post(
+    response: Response = client.post(
         "/user/sign-on",
         headers={"Content-Type": "application/json"},
         content=json.dumps(
-            {"username": new_user.username, "password": new_user.password}
+            {"username": new_user.username, "password": password}
         ),
     )
 
@@ -48,22 +52,21 @@ def test_user_info_route():
     test_user = create_user(uuid, uuid)
     assert isinstance(test_user, User), f"Failed to create test user {uuid}"
     assert test_user.username == uuid
-    user_id = test_user.id
-    response = client.get(f"/user/{user_id}")
-    assert response.status_code == 200, f"Could not find user with ID {user_id}"
+
+    response = client.get(f"/user/{test_user.id}")
+    assert response.status_code == 200, f"Could not find user with ID {test_user.id}"
     response_json = response.json()
 
     assert response_json["status"] == "OK"
 
     user = response_json["details"]["user"]
-
     assert user, "User not found in response"
     assert user["id"]
     assert user["username"]
     assert user["created_date"]
     assert user["updated_date"]
-    assert "active" in user
-    assert "password" not in user
+    assert user["active"]
+    assert not user.get("password")
 
 
 def test_user_error():

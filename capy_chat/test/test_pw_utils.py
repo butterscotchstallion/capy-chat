@@ -18,10 +18,10 @@ def test_check_password():
 
 
 def test_db_verify_password():
-    plaintext_password = "meowmeow"
-    salt_bytes = generate_salt()
-    salt_str = bytes_to_str(salt_bytes)
-    hashed_password = hash_password(plaintext_password, salt_bytes)
+    plaintext_password: str = "meowmeow"
+    salt_bytes: bytes = generate_salt()
+    salt_str: str = bytes_to_str(salt_bytes)
+    hashed_password: str = hash_password(plaintext_password, salt_bytes)
     assert check_password(
         plaintext_password, hashed_password, b64decode(salt_str)
     ), "Verify bytes_to_str failed"

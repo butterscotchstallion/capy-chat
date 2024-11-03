@@ -55,7 +55,7 @@ def create_user(username: str, password: str) -> User | None:
                 )
                 session.add(new_user)
                 session.commit()
-                logger.info(f"Created user {new_user.username}")
+                logger.info(f"Created user: {new_user}")
                 return new_user
     except sqlite3.IntegrityError as integrity_error:
         logger.error(f"Integrity error creating user: {integrity_error}")

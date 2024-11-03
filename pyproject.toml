@@ -12,3 +12,10 @@ dependencies = [
     "sqlalchemy>=2.0.35",
     "websockets>=13.1",
 ]
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "DEBUG"
+log_cli_format = "[%(levelname)8s] %(message)s"
+log_format = "[%(levelname)8s] %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
