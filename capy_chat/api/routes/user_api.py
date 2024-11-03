@@ -45,7 +45,7 @@ async def user_sign_on(user_info: dict):
         if user:
             logger.debug(f"Authenticating {username} with {password}")
 
-            salt_bytes = b64decode(user.salt)
+            salt_bytes: bytes = b64decode(user.salt, validate=True)
             pw_match: bool = check_password(password, user.password, salt_bytes)
             if pw_match:
                 logger.debug(f"Password match for {username}")
@@ -69,10 +69,10 @@ async def user_sign_on(user_info: dict):
                         status_code=500, content=jsonable_encoder(server_error_resp)
                     )
             else:
-                logger.debug(f"Invalid password for {username}")
+                logger.error(f"Invalid password for {username}")
                 return JSONResponse(content=jsonable_encoder(error_resp))
         else:
-            logger.debug(f"User {username} not found")
+            logger.error(f"User {username} not found")
             return JSONResponse(status_code=404, content=jsonable_encoder(error_resp))
     except KeyError:
         bad_req_resp: BasicResponse = {

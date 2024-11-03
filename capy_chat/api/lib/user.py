@@ -6,7 +6,6 @@ from sqlalchemy import select
 
 from capy_chat.api.lib.models import User
 from capy_chat.api.lib.pw_utils import generate_salt, hash_password
-
 from .database import Session
 from .logger import get_customized_logger
 
@@ -46,18 +45,18 @@ def create_user(username: str, password: str) -> User | None:
             logger.debug(f"User {username} exists")
         else:
             with Session() as session:
-                random_bytes = generate_salt()
-                salt = b64encode(random_bytes).decode("utf-8")
-                hashed_password = hash_password(password, random_bytes)
-                default_user = User(
+                random_bytes: bytes = generate_salt()
+                salt: str = b64encode(random_bytes).decode("utf-8")
+                hashed_password: str = hash_password(password, random_bytes)
+                new_user = User(
                     username=username,
                     password=hashed_password,
                     salt=salt,
                 )
-                session.add(default_user)
+                session.add(new_user)
                 session.commit()
-                logger.info(f"Created user {username}")
-                return default_user
+                logger.info(f"Created user {new_user.username}")
+                return new_user
     except sqlite3.IntegrityError as integrity_error:
         logger.error(f"Integrity error creating user: {integrity_error}")
     except KeyError as missing_key:

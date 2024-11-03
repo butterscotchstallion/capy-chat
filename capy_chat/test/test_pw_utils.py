@@ -9,9 +9,9 @@ from capy_chat.api.lib.pw_utils import (
 
 
 def test_check_password():
-    salt = generate_salt()
-    plaintext_password = "yumyumyum ice cream so good"
-    hashed_password = hash_password(plaintext_password, salt)
+    salt: bytes = generate_salt()
+    plaintext_password: str = "yumyumyum ice cream so good"
+    hashed_password: str = hash_password(plaintext_password, salt)
     assert check_password(
         plaintext_password, hashed_password, salt
     ), "Password mismatch"

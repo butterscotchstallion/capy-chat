@@ -7,7 +7,7 @@ from capy_chat.api.lib.logger import get_customized_logger
 from capy_chat.api.lib.models import User
 from capy_chat.api.lib.user import (
     create_user,
-    normalize_username,
+    get_user_by_username, normalize_username,
 )
 from capy_chat.start_api import app
 from capy_chat.test.conftest import create_test_user
@@ -17,8 +17,17 @@ logger = get_customized_logger(__name__)
 
 
 def test_user_sign_on():
-    new_user = create_test_user()
-    assert new_user, "Failed to create test user"
+    # Create new user
+    new_user: User | None = create_test_user()
+    assert isinstance(new_user, User), "Failed to create test user"
+    assert new_user.username
+    assert new_user.password
+
+    # Confirm user exists
+    db_new_user = get_user_by_username(new_user.username)
+    assert isinstance(db_new_user, User), "Failed to create test user"
+    assert db_new_user.username == new_user.username
+    assert db_new_user.password == new_user.password
 
     response = client.post(
         "/user/sign-on",
@@ -27,9 +36,10 @@ def test_user_sign_on():
             {"username": new_user.username, "password": new_user.password}
         ),
     )
+
     assert response.status_code == 200, "Sign in failed"
     resp_json = response.json()
-    assert resp_json["status"] == "OK"
+    assert resp_json["status"] == "OK", "Error signing in"
     assert resp_json["details"]["session_id"]
 
 

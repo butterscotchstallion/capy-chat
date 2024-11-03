@@ -79,4 +79,4 @@ class User(Base):
         }
 
     def __repr__(self) -> str:
-        return f"User(id={self.id}, username={self.username}, active={self.active}, created={self.created_date})"
+        return f"User(id={self.id}, username={self.username}, password={self.password}, active={self.active}, created={self.created_date})"
