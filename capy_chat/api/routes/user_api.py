@@ -43,7 +43,7 @@ async def user_sign_on(user_info: dict):
         user: User | None = get_user_by_username(username)
 
         if user:
-            logger.debug(f"Authenticating {username} with {password}")
+            logger.debug(f"Authenticating {username}")
 
             salt_bytes: bytes = b64decode(user.salt, validate=True)
             pw_match: bool = check_password(password, user.password, salt_bytes)
