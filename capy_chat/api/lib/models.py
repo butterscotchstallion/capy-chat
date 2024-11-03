@@ -19,10 +19,14 @@ from .logger import get_customized_logger
 logger = get_customized_logger(__name__)
 
 
+def uuid_str():
+    return str(uuid4())
+
+
 # Child
 class UserSession(Base):
     __tablename__ = "user_session"
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=str(uuid4()))
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uuid_str)
 
     created_date: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -44,10 +48,6 @@ class UserSession(Base):
             "created_date": str(self.created_date),
             "updated_date": str(self.updated_date),
         }
-
-
-def uuid_str():
-    return str(uuid4())
 
 
 # Parent
