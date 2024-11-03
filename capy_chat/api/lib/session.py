@@ -4,7 +4,6 @@ from sqlalchemy import func
 
 from capy_chat.api.lib.logger import get_customized_logger
 from capy_chat.api.lib.models import UserSession
-
 from .database import Session
 
 logger = get_customized_logger(__name__)
@@ -25,6 +24,16 @@ def get_recent_sessions(session_id: str) -> list[UserSession] | None:
             )
     except Exception as err:
         logger.error(f"Unexpected error: {err}")
+
+
+def get_session_by_user_id(user_id: str) -> UserSession | None:
+    try:
+        with Session() as session:
+            return (
+                session.query(UserSession).filter(UserSession.user_id == user_id).first()
+            )
+    except Exception as err:
+        logger.error(f"get_session_by_user_id: Unexpected error: {err}")
 
 
 def get_session_by_id(session_id: str) -> UserSession | None:
@@ -50,11 +59,10 @@ def update_session(session_to_update: UserSession) -> bool:
 
 def get_or_create_user_session(user_id: str) -> UserSession | None:
     try:
-        user_session = get_session_by_id(user_id)
-
+        user_session = get_session_by_user_id(user_id)
         if user_session:
             with Session() as session:
-                user_session.updated_date = func.utcnow()
+                user_session.updated_date = func.now()
                 session.add(user_session)
                 session.commit()
                 logger.debug("Updated existing session")
@@ -64,7 +72,7 @@ def get_or_create_user_session(user_id: str) -> UserSession | None:
                 new_user_session = UserSession(user_id=user_id)
                 session.add(new_user_session)
                 session.commit()
-                logger.debug("Created new session")
+                logger.debug(f"Created new session for user {user_id}")
                 return new_user_session
     except Exception as err:
         logger.error(f"Unexpected error: {err}")

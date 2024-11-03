@@ -10,6 +10,18 @@ client = TestClient(app)
 logger = get_customized_logger(__name__)
 
 
+def test_get_or_create_session():
+    new_user = create_test_user()
+    assert new_user, "Failed to create test user"
+
+    session = get_or_create_user_session(new_user.id)
+    assert isinstance(session, UserSession), "failed to get session 1"
+
+    session2 = get_or_create_user_session(new_user.id)
+    assert isinstance(session2, UserSession), "failed to get session 2"
+    assert session.id == session2.id
+
+
 def test_session_info_route():
     new_user = create_test_user()
     assert new_user, "Failed to create test user"
