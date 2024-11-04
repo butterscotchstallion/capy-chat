@@ -59,13 +59,13 @@ def update_session(session_to_update: UserSession) -> bool:
 
 def get_or_create_user_session(user_id: str) -> UserSession | None:
     try:
-        user_session = get_session_by_user_id(user_id)
+        user_session: UserSession | None = get_session_by_user_id(user_id)
         if user_session:
             with Session() as session:
                 user_session.updated_date = func.now()
                 session.add(user_session)
                 session.commit()
-                logger.debug("Updated existing session")
+                logger.debug(f"Updated existing session for user {user_id}")
                 return user_session
         else:
             with Session() as session:

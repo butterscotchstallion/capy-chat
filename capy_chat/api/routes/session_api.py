@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from capy_chat.api.lib.logger import get_customized_logger
+from capy_chat.api.lib.models import UserSession
 from capy_chat.api.lib.session import get_session_by_id
 from capy_chat.api.routes.basic_response import BasicResponse
 
@@ -16,9 +17,14 @@ async def session_route(session_id: str):
     Get session info from DB
     """
     try:
-        session = get_session_by_id(session_id)
+        session: UserSession | None = get_session_by_id(session_id)
         if session:
-            session_info = {"status": "OK", "details": {"session": session.to_json()}}
+            session_info = {
+                "status": "OK",
+                "details": {
+                    "session": session.to_json()
+                }
+            }
             return JSONResponse(content=session_info)
         else:
             resp: BasicResponse = {

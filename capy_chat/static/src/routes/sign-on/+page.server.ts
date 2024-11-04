@@ -18,25 +18,30 @@ export const actions = {
                 }
             });
 
-            const {status, message, session_id} = await response.json();
+            console.log("Retrieved sign on info");
 
-            if (status === "OK" && session_id) {
-                cookies.set("sessionID", session_id, {
+            const {status, details, session_id} = await response.json();
+
+            if (status === "OK" && details.session_id) {
+                cookies.set("sessionID", details.session_id, {
                     path: "/",
                     httpOnly: true,
                     sameSite: 'lax'
                 });
+                console.log("Set session ID and redirecting....");
                 throw redirect(303, "/dashboard")
             } else {
+                console.log("Unable to obtain session: " + status + ": " + details.message);
                 return fail(401, {
-                    description: message,
-                    error: status
+                    description: details.message,
+                    error: details.message
                 });
             }
         } else {
+            console.log("No username/password provided.");
             return fail(422, {
                 description: "Username and password are required.",
-                error: "Missing required fields"
+                message: "Missing required fields"
             })
         }
     }

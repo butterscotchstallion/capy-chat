@@ -39,6 +39,14 @@ def test_session_info_route():
     assert resp_session["id"]
     assert resp_session["created_date"]
     assert resp_session["updated_date"]
+    
+    user = resp_session["user"]
+    assert user
+    assert user["id"]
+    assert user["username"]
+    assert user["created_date"]
+    assert user["updated_date"]
+    assert user["active"]
 
 
 def test_session_error():

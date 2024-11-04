@@ -18,7 +18,6 @@ logger = get_customized_logger(__name__)
 @user_router.get("/user/{user_id}")
 async def get_user_info(user_id: str):
     user = get_user_by_id(user_id)
-    logger.debug(f"get_user_info: user={user}")
     if user:
         resp = {"status": "OK", "details": {"user": user.to_json()}}
         return JSONResponse(content=resp)

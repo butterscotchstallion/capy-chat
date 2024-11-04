@@ -23,6 +23,16 @@ def uuid_str():
     return str(uuid4())
 
 
+def user_to_json(obj: User):
+    return {
+        "id": obj.id,
+        "username": obj.username,
+        "created_date": str(obj.created_date),
+        "updated_date": str(obj.updated_date),
+        "active": bool(obj.active),
+    }
+
+
 # Child
 class UserSession(Base):
     __tablename__ = "user_session"
@@ -37,7 +47,7 @@ class UserSession(Base):
 
     # parent: Mapped["Parent"] = relationship(back_populates="child")
     # parent_id: Mapped[int] = mapped_column(ForeignKey("parent_table.id"))
-    user: Mapped["User"] = relationship(back_populates="user_session")
+    user: Mapped["User"] = relationship(back_populates="user_session", lazy='subquery')
     user_id: Mapped[str] = mapped_column(ForeignKey("user_account.id"))
 
     UniqueConstraint(user_id)
@@ -47,6 +57,7 @@ class UserSession(Base):
             "id": self.id,
             "created_date": str(self.created_date),
             "updated_date": str(self.updated_date),
+            "user": user_to_json(self.user)
         }
 
 
@@ -70,13 +81,7 @@ class User(Base):
     user_session = relationship(UserSession, back_populates="user", uselist=False)
 
     def to_json(self):
-        return {
-            "id": self.id,
-            "username": self.username,
-            "created_date": str(self.created_date),
-            "updated_date": str(self.updated_date),
-            "active": bool(self.active),
-        }
+        return user_to_json(self)
 
     def __repr__(self) -> str:
         return f"User(id={self.id}, username={self.username}, active={self.active}, created={self.created_date})"
