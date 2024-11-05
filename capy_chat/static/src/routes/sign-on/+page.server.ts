@@ -20,12 +20,12 @@ export const actions = {
 
             console.log("Retrieved sign on info");
 
-            const {status, details, session_id} = await response.json();
+            const {status, details} = await response.json();
 
             if (status === "OK" && details.session_id) {
                 cookies.set("sessionID", details.session_id, {
                     path: "/",
-                    httpOnly: true,
+                    httpOnly: false,
                     sameSite: 'lax'
                 });
                 console.log("Set session ID and redirecting....");

@@ -39,7 +39,8 @@ def test_session_info_route():
     assert resp_session["id"]
     assert resp_session["created_date"]
     assert resp_session["updated_date"]
-    
+
+    assert resp_session.get("user")
     user = resp_session["user"]
     assert user
     assert user["id"]
